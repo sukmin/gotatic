@@ -8,15 +8,15 @@
 #### 실행
 ```
 #windows
-gotatic-win-2.1.0.exe
+gotatic-win-2.1.1.exe
 
 #mac
-#실행권한 추가시 chmod 755 gotatic-mac-2.1.0
-./gotatic-mac-2.1.0
+#실행권한 추가시 chmod 755 gotatic-mac-2.1.1
+./gotatic-mac-2.1.1
 
 #linux
-#실행권한 추가시 chmod 755 gotatic-linux-2.1.0
-./gotatic-linux-2.1.0
+#실행권한 추가시 chmod 755 gotatic-linux-2.1.1
+./gotatic-linux-2.1.1
 ```
 
 #### 종료
