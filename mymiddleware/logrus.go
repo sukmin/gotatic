@@ -6,7 +6,15 @@ import (
 )
 
 func Logrus() echo.MiddlewareFunc {
+
 	logger := logrus.New()
+	logger.Formatter = &logrus.TextFormatter{
+		ForceColors : false,
+		DisableColors: true,
+		DisableTimestamp : false,
+		FullTimestamp : true,
+	}
+
 	/* ... logger 초기화 */
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
