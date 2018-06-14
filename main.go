@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
+	"github.com/sukmin/gotatic/mymiddleware"
 	"math/rand"
 	"net"
 	"net/http"
@@ -28,17 +29,17 @@ func main() {
 	flag.Parse()
 
 	faviconBytes, _ := base64.StdEncoding.DecodeString(favicon_base64);
-	ip := LocalIp()
 	workPath, _ := os.Getwd()
 
 	fmt.Println("gotatic start")
-	fmt.Println("access url : myhttp://" + ip + ":" + *port)
+	printLocalUrl(*port)
 	fmt.Println("work path : " + workPath)
 
 	e := echo.New()
 	e.HideBanner = true
 
-	e.Use(middleware.Logger())
+	e.Use(mymiddleware.Logrus())
+	e.Use(mymiddleware.NoCache())
 
 	if *basicAuth {
 		getUsername := RandStringRunes(20)
@@ -65,7 +66,10 @@ func main() {
 
 	e.GET("/*", echo.WrapHandler(http.FileServer(http.Dir(workPath))))
 
-	e.Logger.Fatal(e.Start(":" + *port))
+	err := e.Start(":" + *port)
+	if err != nil {
+		panic(err)
+	}
 
 }
 
@@ -80,17 +84,22 @@ func RandStringRunes(n int) string {
 	return string(b)
 }
 
-func LocalIp() string {
+func printLocalUrl(port string) {
+	fmt.Println("access url list")
+	format := "\thttp://%s:%s\n"
 	addrs, err := net.InterfaceAddrs()
 	if err != nil {
-		return ""
+		fmt.Printf(format, "127.0.0.1", port)
+		return
 	}
 	for _, address := range addrs {
 		if ipnet, ok := address.(*net.IPNet); ok && !ipnet.IP.IsLoopback() && ipnet.IP.IsGlobalUnicast() {
 			if ipnet.IP.To4() != nil {
-				return ipnet.IP.String()
+				fmt.Printf(format, ipnet.IP.String(), port)
 			}
 		}
 	}
-	return "127.0.0.1"
+
+	fmt.Printf(format, "127.0.0.1", port)
+
 }

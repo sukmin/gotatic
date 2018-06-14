@@ -32,3 +32,7 @@
 [[constraint]]
   name = "github.com/labstack/echo"
   version = "3.3.5"
+
+[[constraint]]
+  name = "github.com/sirupsen/logrus"
+  version = "1.0.5"
